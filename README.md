@@ -1,1 +1,1 @@
-# aurea-educa-o
+# aurea-educacao
