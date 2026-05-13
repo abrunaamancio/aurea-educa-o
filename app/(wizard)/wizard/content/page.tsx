@@ -76,7 +76,9 @@ export default function ContentPage() {
       body: formData,
     })
 
-    if (res.ok) {
+    if (res.status === 501) {
+      alert("Funcionalidade de remoção de fundo não está configurada nesta instalação.")
+    } else if (res.ok) {
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
       setPhotoPreview(url)

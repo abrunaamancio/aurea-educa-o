@@ -9,8 +9,8 @@ export async function POST(request: Request) {
   const apiKey = process.env.REMOVE_BG_API_KEY
   if (!apiKey) {
     return NextResponse.json(
-      { error: "remove.bg API key not configured" },
-      { status: 503 }
+      { error: "not_configured" },
+      { status: 501 }
     )
   }
 
