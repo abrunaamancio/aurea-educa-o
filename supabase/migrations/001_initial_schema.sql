@@ -9,7 +9,7 @@ create table if not exists approved_students (
   email text not null unique,
   ciclo text not null,
   access_starts_at timestamptz not null,
-  access_expires_at timestamptz not null generated always as (access_starts_at + interval '6 months') stored,
+  access_expires_at timestamptz not null,
   status text not null default 'active' check (status in ('active', 'expired', 'revoked')),
   created_at timestamptz not null default now(),
   first_login_at timestamptz
@@ -101,6 +101,21 @@ create table if not exists footer_section (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- ─── Auto-compute access_expires_at ─────────────────────────────────────────
+
+create or replace function set_access_expires_at()
+returns trigger language plpgsql as $$
+begin
+  new.access_expires_at = new.access_starts_at + interval '6 months';
+  return new;
+end;
+$$;
+
+drop trigger if exists approved_students_set_expires on approved_students;
+create trigger approved_students_set_expires
+  before insert or update of access_starts_at on approved_students
+  for each row execute function set_access_expires_at();
 
 -- ─── Auto-update updated_at ───────────────────────────────────────────────────
 
