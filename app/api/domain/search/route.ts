@@ -33,13 +33,13 @@ export async function GET(request: Request) {
   const cfAccount = process.env.CLOUDFLARE_ACCOUNT_ID
 
   if (!cfToken || !cfAccount) {
-    // Return mock data in development
     return NextResponse.json({
       suggestions: suggestions.slice(0, 4).map((domain) => ({
         domain,
-        available: Math.random() > 0.3,
-        price_cents: domain.endsWith(".com") ? 850 : 4500,
+        available: true,
+        price_cents: domain.endsWith(".com.br") ? 4500 : domain.endsWith(".com") ? 850 : 3900,
         currency: "BRL",
+        mock: true,
       })),
     })
   }

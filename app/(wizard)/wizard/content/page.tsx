@@ -158,6 +158,9 @@ export default function ContentPage() {
   async function handleSave() {
     setSaving(true)
 
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { setSaving(false); return }
+
     const { data: portfolio } = await supabase
       .from("portfolios")
       .select("id")
@@ -169,12 +172,13 @@ export default function ContentPage() {
     }
 
     const pid = portfolio.id
+    const uid = user.id
 
-    // Upload hero photo
+    // Upload hero photo (path: userId/portfolioId/hero/...)
     let photoUrl = ""
     if (photoFile) {
       const ext = photoFile.name.split(".").pop()
-      const path = `${pid}/hero/photo.${ext}`
+      const path = `${uid}/${pid}/hero/photo.${ext}`
       const { data } = await supabase.storage
         .from("portfolio-assets")
         .upload(path, photoFile, { upsert: true })
@@ -209,7 +213,7 @@ export default function ContentPage() {
       let coverUrl = ""
       if (p.cover) {
         const ext = p.cover.name.split(".").pop()
-        const path = `${pid}/projects/${i}.${ext}`
+        const path = `${uid}/${pid}/projects/${i}.${ext}`
         const { data } = await supabase.storage
           .from("portfolio-assets")
           .upload(path, p.cover, { upsert: true })

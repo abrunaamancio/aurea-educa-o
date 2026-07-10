@@ -72,6 +72,9 @@ export default function BrandbookPage() {
   async function handleSave() {
     setSaving(true)
 
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) { setSaving(false); return }
+
     const { data: portfolio } = await supabase
       .from("portfolios")
       .select("id")
@@ -82,11 +85,11 @@ export default function BrandbookPage() {
       return
     }
 
-    // Upload brandbook files to storage
+    // Upload brandbook files to storage (path: userId/portfolioId/brandbook/...)
     const fileUrls: string[] = []
     for (const file of files) {
       const ext = file.name.split(".").pop()
-      const path = `${portfolio.id}/brandbook/${Date.now()}.${ext}`
+      const path = `${user.id}/${portfolio.id}/brandbook/${Date.now()}.${ext}`
       const { data } = await supabase.storage
         .from("portfolio-assets")
         .upload(path, file)
