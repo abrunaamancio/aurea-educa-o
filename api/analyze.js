@@ -19,11 +19,29 @@ export default async function handler(req, res) {
   }
 
   const dados = req.body;
-  if (!dados || (!dados.headline && !dados.sobre && !dados.experiencias)) {
+  const arquivos = Array.isArray(dados?.arquivos) ? dados.arquivos : [];
+  if (!dados || (!arquivos.length && !dados.headline && !dados.sobre && !dados.experiencias)) {
     res.status(400).json({
-      error: "Cole pelo menos uma parte do perfil (headline, sobre ou experiências) para a análise."
+      error: "Envie os prints ou o PDF do perfil — ou cole pelo menos uma parte do texto (headline, Sobre ou experiências)."
     });
     return;
+  }
+
+  const TIPOS_IMAGEM = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+  const blocosArquivos = [];
+  for (const a of arquivos.slice(0, 12)) {
+    if (!a || typeof a.dados !== "string" || !a.dados) continue;
+    if (a.tipo === "application/pdf") {
+      blocosArquivos.push({
+        type: "document",
+        source: { type: "base64", media_type: "application/pdf", data: a.dados }
+      });
+    } else if (TIPOS_IMAGEM.includes(a.tipo)) {
+      blocosArquivos.push({
+        type: "image",
+        source: { type: "base64", media_type: a.tipo, data: a.dados }
+      });
+    }
   }
 
   try {
@@ -41,7 +59,12 @@ export default async function handler(req, res) {
       output_config: {
         format: { type: "json_schema", schema: OUTPUT_SCHEMA }
       },
-      messages: [{ role: "user", content: buildUserMessage(dados) }]
+      messages: [
+        {
+          role: "user",
+          content: [...blocosArquivos, { type: "text", text: buildUserMessage(dados) }]
+        }
+      ]
     });
 
     const message = await stream.finalMessage();

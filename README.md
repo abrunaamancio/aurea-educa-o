@@ -1,6 +1,14 @@
 # LinkedIn Maestria — Leitor e Configurador de Perfil
 
-Ferramenta da **áurea educação** para os alunos do Método Maestria: o aluno cola o perfil atual do LinkedIn e recebe a configuração completa para performar melhor e subir o SSI (Social Selling Index).
+Ferramenta da **áurea educação** para os alunos do Método Maestria: o aluno envia o perfil atual do LinkedIn e recebe a configuração completa para performar melhor e subir o SSI (Social Selling Index).
+
+## Como o aluno usa (3 passos, sem fricção)
+
+1. **Envia o perfil** por um de três caminhos — prints das seções (o mais simples), o PDF que o próprio LinkedIn exporta ("Mais → Salvar como PDF") ou copiar e colar o texto. Quem envia prints/PDF **não precisa preencher nenhum campo**.
+2. **Pega o SSI oficial** — a página tem o link direto para [linkedin.com/sales/ssi](https://www.linkedin.com/sales/ssi) com o passo a passo (abrir logado → tirar print da tela → subir o print junto com os outros). A ferramenta lê os números do print sozinha; digitar é opcional.
+3. **Gera a configuração** — os campos de objetivo (área, senioridade, cargo-alvo) são opcionais; quando vazios, a análise infere o posicionamento a partir do próprio perfil.
+
+Com prints, a análise também avalia o que é visual: foto, banner e completude aparente do perfil.
 
 ## O que a ferramenta entrega
 

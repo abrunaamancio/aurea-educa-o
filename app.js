@@ -8,12 +8,20 @@
   const formError = document.getElementById("form-error");
   const submitBtn = document.getElementById("submit-btn");
   const loadingMsg = document.getElementById("loading-msg");
+  const dropzone = document.getElementById("dropzone");
+  const fileInput = document.getElementById("file-input");
+  const fileList = document.getElementById("file-list");
 
+  let arquivos = []; // {nome, tipo, dados(base64 sem prefixo), tamanho, thumb}
   let ultimoResultado = null;
   let loadingTimer = null;
 
+  const MAX_ARQUIVOS = 12;
+  const MAX_PAYLOAD_BASE64 = 4_200_000; // ~4,2 MB — limite de requisição do servidor
+
   const LOADING_MSGS = [
     "Analisando os 4 pilares do SSI.",
+    "Lendo seus prints e extraindo o conteúdo do perfil.",
     "Comparando seu perfil com as boas práticas de 2026.",
     "Reescrevendo sua headline e seu Sobre.",
     "Montando o checklist de configuração.",
@@ -28,6 +36,113 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
 
+  /* ============ upload de arquivos ============ */
+
+  dropzone.addEventListener("click", () => fileInput.click());
+  dropzone.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      fileInput.click();
+    }
+  });
+  fileInput.addEventListener("change", () => {
+    adicionarArquivos([...fileInput.files]);
+    fileInput.value = "";
+  });
+  ["dragover", "dragenter"].forEach((ev) =>
+    dropzone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropzone.classList.add("dragover");
+    })
+  );
+  ["dragleave", "drop"].forEach((ev) =>
+    dropzone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("dragover");
+    })
+  );
+  dropzone.addEventListener("drop", (e) => adicionarArquivos([...e.dataTransfer.files]));
+
+  async function adicionarArquivos(files) {
+    formError.hidden = true;
+    for (const file of files) {
+      if (arquivos.length >= MAX_ARQUIVOS) {
+        mostrarErro(`Limite de ${MAX_ARQUIVOS} arquivos. Remova algum antes de adicionar outro.`);
+        break;
+      }
+      try {
+        if (file.type === "application/pdf" || /\.pdf$/i.test(file.name)) {
+          const dados = await lerBase64(file);
+          arquivos.push({ nome: file.name, tipo: "application/pdf", dados, tamanho: file.size, thumb: null });
+        } else if (file.type.startsWith("image/") || /\.(png|jpe?g|webp)$/i.test(file.name)) {
+          const { dados, thumb, tamanho } = await comprimirImagem(file);
+          arquivos.push({ nome: file.name, tipo: "image/jpeg", dados, tamanho, thumb });
+        } else {
+          mostrarErro(`"${file.name}" não é um formato aceito. Envie PNG, JPG ou PDF.`);
+        }
+      } catch {
+        mostrarErro(`Não consegui ler o arquivo "${file.name}". Tente novamente.`);
+      }
+    }
+    renderFileList();
+  }
+
+  function lerBase64(file) {
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(String(r.result).split(",")[1]);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+
+  // Reduz prints grandes para o envio ser rápido, mantendo o texto legível
+  function comprimirImagem(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1800;
+        const escala = Math.min(1, MAX / Math.max(img.width, img.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * escala);
+        canvas.height = Math.round(img.height * escala);
+        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.88);
+        URL.revokeObjectURL(url);
+        const dados = dataUrl.split(",")[1];
+        resolve({ dados, thumb: dataUrl, tamanho: Math.round(dados.length * 0.75) });
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("imagem inválida"));
+      };
+      img.src = url;
+    });
+  }
+
+  function renderFileList() {
+    fileList.innerHTML = arquivos
+      .map(
+        (a, i) => `
+      <li>
+        ${a.thumb ? `<img class="file-thumb" src="${a.thumb}" alt="" />` : `<span class="file-pdf-icon">PDF</span>`}
+        <span class="file-name">${esc(a.nome)}</span>
+        <span class="file-size">${(a.tamanho / 1024).toFixed(0)} KB</span>
+        <button type="button" class="file-remove" data-i="${i}" aria-label="Remover ${esc(a.nome)}">✕</button>
+      </li>`
+      )
+      .join("");
+    fileList.querySelectorAll(".file-remove").forEach((btn) =>
+      btn.addEventListener("click", () => {
+        arquivos.splice(Number(btn.dataset.i), 1);
+        renderFileList();
+      })
+    );
+  }
+
+  /* ============ coleta e validação ============ */
+
   function coletarDados() {
     const fd = new FormData(form);
     const d = {};
@@ -35,13 +150,13 @@
     ["tem_foto", "tem_banner", "tem_url", "tem_recomendacoes", "tem_destaques"].forEach(
       (k) => (d[k] = form.elements[k].checked)
     );
-    // Campos numéricos do SSI oficial (aceita vírgula ou ponto decimal)
     ["ssi_total", "ssi_pilar_marca", "ssi_pilar_pessoas", "ssi_pilar_insights", "ssi_pilar_relacionamentos"].forEach(
       (k) => {
         const n = parseFloat(String(d[k] || "").replace(",", "."));
         d[k] = Number.isFinite(n) ? n : null;
       }
     );
+    d.arquivos = arquivos.map(({ nome, tipo, dados }) => ({ nome, tipo, dados }));
     return d;
   }
 
@@ -56,27 +171,33 @@
     formError.hidden = true;
 
     const d = coletarDados();
-    if (!d.area || !d.senioridade || !d.objetivo) {
-      mostrarErro("Preencha os campos obrigatórios: área, senioridade e cargo-alvo.");
+
+    if (!d.arquivos.length && !d.headline && !d.sobre && !d.experiencias) {
+      mostrarErro(
+        "Envie os prints ou o PDF do seu perfil na área do Passo 1 — ou, se preferir, abra o Caminho C e cole os textos."
+      );
       return;
     }
-    if (!d.headline && !d.sobre && !d.experiencias) {
-      mostrarErro("Cole pelo menos uma parte do perfil: headline, Sobre ou experiências.");
+    const payloadBase64 = d.arquivos.reduce((s, a) => s + a.dados.length, 0);
+    if (payloadBase64 > MAX_PAYLOAD_BASE64) {
+      mostrarErro(
+        "Os arquivos passaram do limite de envio. Remova algum print repetido ou envie só o PDF do LinkedIn (Caminho B)."
+      );
       return;
     }
     if (d.ssi_total !== null && (d.ssi_total < 0 || d.ssi_total > 100)) {
-      mostrarErro("O SSI total vai de 0 a 100. Confira o número em linkedin.com/sales/ssi.");
+      mostrarErro("O SSI total vai de 0 a 100. Confira o número na sua página do SSI.");
       return;
     }
     const pilaresInvalidos = ["ssi_pilar_marca", "ssi_pilar_pessoas", "ssi_pilar_insights", "ssi_pilar_relacionamentos"]
       .some((k) => d[k] !== null && (d[k] < 0 || d[k] > 25));
     if (pilaresInvalidos) {
-      mostrarErro("Cada pilar do SSI vai de 0 a 25. Confira os números em linkedin.com/sales/ssi.");
+      mostrarErro("Cada pilar do SSI vai de 0 a 25. Confira os números na sua página do SSI.");
       return;
     }
 
     submitBtn.disabled = true;
-    formSection.hidden = true;
+    form.hidden = true;
     resultSection.hidden = true;
     loadingSection.hidden = false;
     loadingSection.scrollIntoView({ behavior: "smooth" });
@@ -103,13 +224,15 @@
       resultSection.scrollIntoView({ behavior: "smooth" });
     } catch (err) {
       loadingSection.hidden = true;
-      formSection.hidden = false;
+      form.hidden = false;
       mostrarErro(err.message || "Erro inesperado. Tente novamente.");
     } finally {
       clearInterval(loadingTimer);
       submitBtn.disabled = false;
     }
   });
+
+  /* ============ resultado ============ */
 
   function copyBox(texto, rotulo) {
     return `
@@ -252,7 +375,7 @@
 
   document.getElementById("nova-analise").addEventListener("click", () => {
     resultSection.hidden = true;
-    formSection.hidden = false;
+    form.hidden = false;
     formSection.scrollIntoView({ behavior: "smooth" });
   });
 

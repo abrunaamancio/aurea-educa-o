@@ -26,6 +26,17 @@ Princípio central: "Clareza antes de velocidade. Método sempre vence sorte."
 
 Você recebe os dados do perfil atual do aluno e devolve um diagnóstico completo + todos os textos e configurações prontos para o perfil performar melhor e subir o SSI (Social Selling Index).
 
+# COMO LER OS ARQUIVOS ENVIADOS (prints e/ou PDF)
+
+O aluno pode enviar prints (screenshots) do perfil, o PDF exportado pelo LinkedIn, texto colado — ou uma combinação. Regras:
+
+1. **Extraia tudo dos arquivos**: headline, Sobre, experiências, competências, recomendações, Destaques, número de conexões/seguidores — o que estiver visível.
+2. **Print da página do SSI** (linkedin.com/sales/ssi): se houver um print mostrando o Social Selling Index, leia a nota total e a nota de cada um dos 4 pilares EXATAMENTE como aparecem e trate como SSI oficial (origem "oficial"). Se o aluno também digitou números e eles divergirem do print, o print vence.
+3. **Avalie o que é visual**: nos prints do topo do perfil, analise a foto (enquadramento, luz, fundo) e o banner (personalizado ou padrão? comunica posicionamento?) e use isso no checklist de configuração — com prints, você não depende das declarações do aluno sobre foto/banner.
+4. **Arquivos vencem campos digitados**: se o conteúdo de um print/PDF divergir do texto colado, use o que está no arquivo (é a fonte primária).
+5. **Se alguma seção não aparece em nenhum arquivo nem foi colada**, trate como inexistente ou não informada — não invente conteúdo.
+6. **Se os campos de posicionamento (área, senioridade, cargo-alvo) estiverem vazios**, infira o posicionamento mais provável a partir do próprio perfil e deixe isso explícito no resumo do diagnóstico (ex.: "Analisei seu perfil mirando a posição de X — se o alvo for outro, refaça informando o objetivo").
+
 # OS 4 PILARES DO SSI (cada um vale 0–25, total 0–100)
 
 1. **Estabelecer sua marca profissional** — perfil completo (foto, banner, headline, sobre, experiências com mídia), publicações que demonstram autoridade, recomendações recebidas.
@@ -230,6 +241,13 @@ export function buildUserMessage(d) {
   const sim = (v) => (v ? "sim" : "não");
   const num = (v) => (v === null || v === undefined || v === "" ? null : v);
 
+  const nArquivos = Array.isArray(d.arquivos) ? d.arquivos.length : 0;
+  const blocoArquivos = nArquivos
+    ? `## Arquivos enviados
+O aluno enviou ${nArquivos} arquivo(s) (prints e/ou PDF do perfil), anexados nesta mensagem. Eles são a fonte primária — extraia o conteúdo deles conforme as regras do sistema. Verifique se algum é o print da página do SSI.`
+    : `## Arquivos enviados
+Nenhum arquivo — use apenas o texto colado abaixo.`;
+
   const temSSI =
     num(d.ssi_total) !== null ||
     [d.ssi_pilar_marca, d.ssi_pilar_pessoas, d.ssi_pilar_insights, d.ssi_pilar_relacionamentos].some(
@@ -243,10 +261,12 @@ export function buildUserMessage(d) {
 - Pilar 2 — Localizar as pessoas certas: ${num(d.ssi_pilar_pessoas) ?? "(não informado)"}
 - Pilar 3 — Interagir oferecendo insights: ${num(d.ssi_pilar_insights) ?? "(não informado)"}
 - Pilar 4 — Cultivar relacionamentos: ${num(d.ssi_pilar_relacionamentos) ?? "(não informado)"}`
-    : `## SSI OFICIAL
-Não informado — estime as notas a partir das evidências e recomende consultar linkedin.com/sales/ssi.`;
+    : `## SSI OFICIAL (digitado)
+Nenhum número digitado. Se houver print da página do SSI entre os arquivos, leia os números dele (origem "oficial"); senão, estime (origem "estimada") e recomende consultar linkedin.com/sales/ssi.`;
 
   return `Analise o perfil abaixo e gere o diagnóstico completo.
+
+${blocoArquivos}
 
 ${blocoSSI}
 
@@ -271,7 +291,7 @@ ${d.experiencias || "(não informadas)"}
 ### Competências atuais
 ${d.competencias || "(não informadas)"}
 
-## Configuração atual
+## Configuração atual (declarada pelo aluno${nArquivos ? " — se houver prints, o que aparece neles vence estas declarações" : ""})
 - Foto profissional: ${sim(d.tem_foto)}
 - Banner personalizado: ${sim(d.tem_banner)}
 - URL personalizada: ${sim(d.tem_url)}
