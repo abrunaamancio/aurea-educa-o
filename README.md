@@ -4,7 +4,7 @@ Ferramenta da **áurea educação** para os alunos do Método Maestria: o aluno 
 
 ## O que a ferramenta entrega
 
-1. **Diagnóstico dos 4 pilares do SSI** — nota estimada (0–100) e ações por pilar
+1. **Diagnóstico dos 4 pilares do SSI** — calibrado no **SSI oficial** do aluno quando ele informa os números de [linkedin.com/sales/ssi](https://www.linkedin.com/sales/ssi) (a página mostra o SSI apenas para a própria pessoa logada, por isso o aluno consulta e digita); sem os números, a ferramenta estima
 2. **Headline** — 3 opções prontas, com as boas práticas 2026 (220 caracteres, palavras-chave, posicionamento)
 3. **Sobre** — texto completo pronto para colar (gancho nas 3 primeiras linhas, provas, CTA)
 4. **Experiências** — exemplo reescrito com bullets de resultado quantificado

@@ -35,6 +35,13 @@
     ["tem_foto", "tem_banner", "tem_url", "tem_recomendacoes", "tem_destaques"].forEach(
       (k) => (d[k] = form.elements[k].checked)
     );
+    // Campos numéricos do SSI oficial (aceita vírgula ou ponto decimal)
+    ["ssi_total", "ssi_pilar_marca", "ssi_pilar_pessoas", "ssi_pilar_insights", "ssi_pilar_relacionamentos"].forEach(
+      (k) => {
+        const n = parseFloat(String(d[k] || "").replace(",", "."));
+        d[k] = Number.isFinite(n) ? n : null;
+      }
+    );
     return d;
   }
 
@@ -55,6 +62,16 @@
     }
     if (!d.headline && !d.sobre && !d.experiencias) {
       mostrarErro("Cole pelo menos uma parte do perfil: headline, Sobre ou experiências.");
+      return;
+    }
+    if (d.ssi_total !== null && (d.ssi_total < 0 || d.ssi_total > 100)) {
+      mostrarErro("O SSI total vai de 0 a 100. Confira o número em linkedin.com/sales/ssi.");
+      return;
+    }
+    const pilaresInvalidos = ["ssi_pilar_marca", "ssi_pilar_pessoas", "ssi_pilar_insights", "ssi_pilar_relacionamentos"]
+      .some((k) => d[k] !== null && (d[k] < 0 || d[k] > 25));
+    if (pilaresInvalidos) {
+      mostrarErro("Cada pilar do SSI vai de 0 a 25. Confira os números em linkedin.com/sales/ssi.");
       return;
     }
 
@@ -113,8 +130,13 @@
     resultContainer.innerHTML = `
       <div class="score-panel">
         <div>
-          <p class="score-label">SSI estimado</p>
+          <p class="score-label">${r.diagnostico.origem_nota === "oficial" ? "SSI oficial" : "SSI estimado"}</p>
           <p class="score-num">${esc(r.diagnostico.nota_geral)}<span style="font-size:0.4em">/100</span></p>
+          ${
+            r.diagnostico.origem_nota === "oficial"
+              ? ""
+              : `<p class="score-note">Confira seu número real em <a href="https://www.linkedin.com/sales/ssi" target="_blank" rel="noopener">linkedin.com/sales/ssi</a> e refaça a análise com ele.</p>`
+          }
         </div>
         <p class="score-resumo">${esc(r.diagnostico.resumo)}</p>
       </div>
@@ -240,7 +262,7 @@
     const md = [
       `# Diagnóstico LinkedIn Maestria — áurea educação`,
       ``,
-      `## SSI estimado: ${r.diagnostico.nota_geral}/100`,
+      `## SSI ${r.diagnostico.origem_nota === "oficial" ? "oficial" : "estimado"}: ${r.diagnostico.nota_geral}/100`,
       r.diagnostico.resumo,
       ``,
       `## Pilares do SSI`,

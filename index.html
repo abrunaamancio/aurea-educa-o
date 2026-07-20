@@ -97,6 +97,33 @@
             <textarea name="competencias" rows="2" placeholder="Ex.: Figma, Design Thinking, Pesquisa com usuários..."></textarea>
           </label>
 
+          <fieldset class="ssi-fieldset">
+            <legend>Seu SSI oficial (recomendado)</legend>
+            <p class="fieldset-help">
+              Abra <a href="https://www.linkedin.com/sales/ssi" target="_blank" rel="noopener">linkedin.com/sales/ssi</a>
+              logado na sua conta — a página mostra seu Social Selling Index oficial e a nota de cada
+              um dos 4 pilares. Digite os números abaixo e a análise será calibrada no seu SSI real,
+              não numa estimativa.
+            </p>
+            <div class="ssi-grid">
+              <label>SSI total (0–100)
+                <input type="number" name="ssi_total" min="0" max="100" step="0.01" placeholder="Ex.: 42" />
+              </label>
+              <label>Estabelecer sua marca profissional (0–25)
+                <input type="number" name="ssi_pilar_marca" min="0" max="25" step="0.01" placeholder="Ex.: 14,3" />
+              </label>
+              <label>Localizar as pessoas certas (0–25)
+                <input type="number" name="ssi_pilar_pessoas" min="0" max="25" step="0.01" placeholder="Ex.: 8,1" />
+              </label>
+              <label>Interagir oferecendo insights (0–25)
+                <input type="number" name="ssi_pilar_insights" min="0" max="25" step="0.01" placeholder="Ex.: 6,7" />
+              </label>
+              <label>Cultivar relacionamentos (0–25)
+                <input type="number" name="ssi_pilar_relacionamentos" min="0" max="25" step="0.01" placeholder="Ex.: 12,9" />
+              </label>
+            </div>
+          </fieldset>
+
           <fieldset>
             <legend>Configuração atual do perfil</legend>
             <div class="checks">

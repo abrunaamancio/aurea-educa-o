@@ -33,7 +33,9 @@ Você recebe os dados do perfil atual do aluno e devolve um diagnóstico complet
 3. **Interagir oferecendo insights** — comentários de valor, compartilhamentos com opinião, participação em conversas do setor, mensagens relevantes.
 4. **Cultivar relacionamentos** — rede sólida com decisores, taxa de aceitação de convites, relacionamentos mantidos ao longo do tempo.
 
-Estime a nota de cada pilar a partir das evidências fornecidas. Seja honesto: nota baixa com plano claro vale mais que nota inflada.
+**Se o aluno informou o SSI oficial** (consultado em linkedin.com/sales/ssi): use exatamente esses números como as notas — não os recalcule. Seu trabalho passa a ser explicar POR QUE cada pilar está naquela nota (conectando com as evidências do perfil) e o que fazer para subir cada um, priorizando os pilares mais baixos. Marque a origem como "oficial".
+
+**Se o aluno NÃO informou o SSI oficial**: estime a nota de cada pilar a partir das evidências fornecidas e marque a origem como "estimada". Seja honesto: nota baixa com plano claro vale mais que nota inflada. Recomende que ele consulte o número real em linkedin.com/sales/ssi (a página mostra o SSI apenas para a própria pessoa logada).
 
 # BOAS PRÁTICAS 2026 DE CONFIGURAÇÃO DE PERFIL (sua base de análise)
 
@@ -107,9 +109,10 @@ export const OUTPUT_SCHEMA = {
     diagnostico: {
       type: "object",
       additionalProperties: false,
-      required: ["nota_geral", "resumo", "pilares"],
+      required: ["nota_geral", "origem_nota", "resumo", "pilares"],
       properties: {
-        nota_geral: { type: "integer", description: "Estimativa de SSI atual, 0-100" },
+        nota_geral: { type: "number", description: "SSI atual, 0-100. Se o aluno informou o SSI oficial, repita exatamente o número informado" },
+        origem_nota: { type: "string", enum: ["oficial", "estimada"], description: "oficial = o aluno informou o SSI real de linkedin.com/sales/ssi; estimada = calculada a partir das evidências" },
         resumo: { type: "string", description: "Diagnóstico direto em 2-4 frases: o principal problema e o principal ganho possível" },
         pilares: {
           type: "array",
@@ -119,7 +122,7 @@ export const OUTPUT_SCHEMA = {
             required: ["pilar", "nota", "analise", "acoes"],
             properties: {
               pilar: { type: "string" },
-              nota: { type: "integer", description: "0-25" },
+              nota: { type: "number", description: "0-25. Se o aluno informou a nota oficial do pilar, repita exatamente o número informado" },
               analise: { type: "string" },
               acoes: { type: "array", items: { type: "string" } }
             }
@@ -225,7 +228,27 @@ export const OUTPUT_SCHEMA = {
 
 export function buildUserMessage(d) {
   const sim = (v) => (v ? "sim" : "não");
+  const num = (v) => (v === null || v === undefined || v === "" ? null : v);
+
+  const temSSI =
+    num(d.ssi_total) !== null ||
+    [d.ssi_pilar_marca, d.ssi_pilar_pessoas, d.ssi_pilar_insights, d.ssi_pilar_relacionamentos].some(
+      (v) => num(v) !== null
+    );
+
+  const blocoSSI = temSSI
+    ? `## SSI OFICIAL (consultado pelo aluno em linkedin.com/sales/ssi — use estes números exatos)
+- SSI total: ${num(d.ssi_total) ?? "(não informado)"}
+- Pilar 1 — Estabelecer sua marca profissional: ${num(d.ssi_pilar_marca) ?? "(não informado)"}
+- Pilar 2 — Localizar as pessoas certas: ${num(d.ssi_pilar_pessoas) ?? "(não informado)"}
+- Pilar 3 — Interagir oferecendo insights: ${num(d.ssi_pilar_insights) ?? "(não informado)"}
+- Pilar 4 — Cultivar relacionamentos: ${num(d.ssi_pilar_relacionamentos) ?? "(não informado)"}`
+    : `## SSI OFICIAL
+Não informado — estime as notas a partir das evidências e recomende consultar linkedin.com/sales/ssi.`;
+
   return `Analise o perfil abaixo e gere o diagnóstico completo.
+
+${blocoSSI}
 
 ## Posicionamento
 - Nome: ${d.nome || "(não informado)"}
