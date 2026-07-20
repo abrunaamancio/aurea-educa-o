@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn Maestria — Leitor e Configurador de Perfil | áurea educação</title>
+  <meta name="description" content="Cole seu perfil atual do LinkedIn e receba a configuração completa para performar melhor e subir seu SSI. Ferramenta do Método Maestria, da áurea educação." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <p class="eyebrow">áurea educação · ferramenta maestria</p>
+      <h1>Seu perfil do LinkedIn,<br /><span class="accent">configurado para performar.</span></h1>
+      <p class="hero-sub">
+        Cole seu perfil atual. Receba o diagnóstico dos 4 pilares do SSI, a headline e o Sobre
+        reescritos com as boas práticas de 2026, o checklist completo de configuração e o plano
+        de conexões e publicações. Tudo pronto para colar.
+      </p>
+      <a href="#formulario" class="cta">Analisar meu perfil</a>
+      <p class="hero-note">Feito para UX, Product, Service e CX Designers plenos e seniores.</p>
+    </div>
+  </header>
+
+  <!-- FORM -->
+  <main>
+    <section id="formulario" class="section section-light">
+      <div class="container narrow">
+        <p class="eyebrow eyebrow-dark">passo 1</p>
+        <h2>Cole seu perfil atual</h2>
+        <p class="section-sub">Quanto mais completo o material, mais precisa a configuração. Campos com * são obrigatórios.</p>
+
+        <form id="profile-form" novalidate>
+          <div class="grid-2">
+            <label>Seu nome
+              <input type="text" name="nome" placeholder="Como aparece no LinkedIn" />
+            </label>
+            <label>Área de atuação *
+              <select name="area" required>
+                <option value="">Selecione</option>
+                <option>UX Design</option>
+                <option>Product Design</option>
+                <option>Service Design</option>
+                <option>CX / Customer Experience</option>
+                <option>UX Research</option>
+                <option>Outra área de design</option>
+              </select>
+            </label>
+            <label>Senioridade *
+              <select name="senioridade" required>
+                <option value="">Selecione</option>
+                <option>Pleno</option>
+                <option>Sênior</option>
+                <option>Lead / Principal / Staff</option>
+                <option>Gestão (Coordenação, Head)</option>
+              </select>
+            </label>
+            <label>Momento de carreira
+              <select name="momento">
+                <option value="">Selecione</option>
+                <option>Em transição de empresa</option>
+                <option>Buscando promoção interna</option>
+                <option>Reposicionamento de área</option>
+                <option>Fortalecendo autoridade na área</option>
+              </select>
+            </label>
+            <label>Cargo ou posicionamento que você quer alcançar *
+              <input type="text" name="objetivo" required placeholder="Ex.: Service Designer Sênior em empresa de produto" />
+            </label>
+            <label>Mercado-alvo
+              <select name="mercado">
+                <option>Brasil</option>
+                <option>Internacional (inglês)</option>
+                <option>Brasil + Internacional</option>
+              </select>
+            </label>
+          </div>
+
+          <label>Headline atual (o texto abaixo do seu nome)
+            <textarea name="headline" rows="2" placeholder="Cole sua headline atual"></textarea>
+          </label>
+
+          <label>Sobre atual (seção "Sobre" completa)
+            <textarea name="sobre" rows="6" placeholder="Cole o texto da sua seção Sobre. Se estiver vazia, deixe em branco."></textarea>
+          </label>
+
+          <label>Experiências (cargo, empresa e descrição — cole as 2 ou 3 mais relevantes)
+            <textarea name="experiencias" rows="8" placeholder="Ex.:&#10;Product Designer — Empresa X (2022–atual)&#10;Responsável por...&#10;&#10;UX Designer — Empresa Y (2019–2022)&#10;Atuei em..."></textarea>
+          </label>
+
+          <label>Competências listadas hoje no seu perfil
+            <textarea name="competencias" rows="2" placeholder="Ex.: Figma, Design Thinking, Pesquisa com usuários..."></textarea>
+          </label>
+
+          <fieldset>
+            <legend>Configuração atual do perfil</legend>
+            <div class="checks">
+              <label class="check"><input type="checkbox" name="tem_foto" /> Tenho foto profissional</label>
+              <label class="check"><input type="checkbox" name="tem_banner" /> Tenho banner personalizado</label>
+              <label class="check"><input type="checkbox" name="tem_url" /> Minha URL é personalizada</label>
+              <label class="check"><input type="checkbox" name="tem_recomendacoes" /> Tenho recomendações recebidas</label>
+              <label class="check"><input type="checkbox" name="tem_destaques" /> Tenho itens em Destaques</label>
+            </div>
+            <div class="grid-2">
+              <label>Com que frequência você publica?
+                <select name="frequencia_publicacao">
+                  <option>Não publico</option>
+                  <option>Raramente (menos de 1x/mês)</option>
+                  <option>1 a 3x por mês</option>
+                  <option>1x por semana</option>
+                  <option>2x ou mais por semana</option>
+                </select>
+              </label>
+              <label>Tamanho da sua rede
+                <select name="tamanho_rede">
+                  <option value="">Selecione</option>
+                  <option>Menos de 500 conexões</option>
+                  <option>500 a 1.000</option>
+                  <option>1.000 a 3.000</option>
+                  <option>Mais de 3.000</option>
+                </select>
+              </label>
+            </div>
+          </fieldset>
+
+          <label>Algo mais que a análise precisa saber?
+            <textarea name="contexto" rows="3" placeholder="Ex.: empresas onde já trabalhou, resultados que tem para provar, empresas-alvo..."></textarea>
+          </label>
+
+          <button type="submit" class="cta cta-full" id="submit-btn">Gerar minha configuração</button>
+          <p id="form-error" class="form-error" hidden></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- LOADING -->
+    <section id="loading" class="section section-dark" hidden>
+      <div class="container narrow center">
+        <div class="spinner" aria-hidden="true"></div>
+        <h2 class="loading-title">Lendo seu perfil…</h2>
+        <p id="loading-msg" class="section-sub light">Analisando os 4 pilares do SSI.</p>
+        <p class="hero-note">A análise completa leva de 1 a 3 minutos. Não feche esta página.</p>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="resultado" class="section section-light" hidden>
+      <div class="container">
+        <p class="eyebrow eyebrow-dark">seu diagnóstico</p>
+        <h2>Configuração completa do seu perfil</h2>
+        <div id="resultado-conteudo"></div>
+        <div class="result-actions">
+          <button class="cta secondary" id="nova-analise">Fazer nova análise</button>
+          <button class="cta" id="baixar-md">Baixar diagnóstico (.md)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÉTODO -->
+    <section class="section section-dark">
+      <div class="container narrow center">
+        <p class="eyebrow">método maestria</p>
+        <h2 class="light-title">A vitrine precisa sustentar<br />o nível que você já atingiu.</h2>
+        <p class="section-sub light">
+          Esta ferramenta configura seu LinkedIn. A Aceleração Maestria constrói a vitrine completa:
+          currículo ATS, LinkedIn, portfólio e apresentação de case — em ~6 meses de construção guiada.
+        </p>
+        <a href="https://aureaeducacao.com.br" class="cta" target="_blank" rel="noopener">Conhecer a Aceleração Maestria</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p><strong>áurea educação</strong> · Clareza antes de velocidade. Método sempre vence sorte.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
