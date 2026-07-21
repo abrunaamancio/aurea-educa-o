@@ -1,0 +1,10 @@
+{
+  "name": "linkedin-maestria",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Leitor e configurador de perfil do LinkedIn — áurea educação",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.110.0"
+  }
+}

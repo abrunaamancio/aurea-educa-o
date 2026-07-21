@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn Maestria — Leitor e Configurador de Perfil | áurea educação</title>
+  <meta name="description" content="Envie prints ou o PDF do seu perfil do LinkedIn e receba a configuração completa para performar melhor e subir seu SSI. Ferramenta do Método Maestria, da áurea educação." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <p class="eyebrow">áurea educação · ferramenta maestria</p>
+      <h1>Seu perfil do LinkedIn,<br /><span class="accent">configurado para performar.</span></h1>
+      <p class="hero-sub">
+        Tire prints do seu perfil, envie aqui e receba: diagnóstico dos 4 pilares do SSI,
+        headline e Sobre reescritos com as boas práticas de 2026, checklist completo de
+        configuração e plano de conexões e publicações. Tudo pronto para colar.
+      </p>
+      <a href="#formulario" class="cta">Analisar meu perfil</a>
+      <p class="hero-note">Feito para UX, Product, Service e CX Designers plenos e seniores. Leva menos de 5 minutos.</p>
+    </div>
+  </header>
+
+  <main>
+    <form id="profile-form" novalidate>
+
+      <!-- PASSO 1 — ENVIAR O PERFIL -->
+      <section id="formulario" class="section section-light">
+        <div class="container narrow">
+          <p class="eyebrow eyebrow-dark">passo 1 de 3</p>
+          <h2>Envie seu perfil</h2>
+          <p class="section-sub">Escolha <strong>um</strong> dos caminhos abaixo. O mais simples é o de prints — não precisa preencher mais nada.</p>
+
+          <div class="caminhos">
+            <div class="caminho-card">
+              <span class="caminho-tag">Caminho A · o mais simples</span>
+              <h3>📸 Prints do perfil</h3>
+              <p>Abra seu perfil no LinkedIn (celular ou computador) e tire um print de cada parte:</p>
+              <ol>
+                <li><strong>Topo do perfil</strong> — mostrando foto, capa e headline</li>
+                <li><strong>Sobre</strong> — toque em <em>"…ver mais"</em> antes do print, para aparecer o texto inteiro</li>
+                <li><strong>Experiências</strong> — as 2 ou 3 mais recentes</li>
+                <li><strong>Competências</strong></li>
+              </ol>
+              <p class="caminho-note">Depois é só arrastar (ou tocar para escolher) os prints na área abaixo. ⤵</p>
+            </div>
+
+            <div class="caminho-card">
+              <span class="caminho-tag">Caminho B · um arquivo só</span>
+              <h3>📄 PDF do LinkedIn</h3>
+              <p>O próprio LinkedIn exporta seu perfil completo em PDF:</p>
+              <ol>
+                <li>Abra o <strong>seu perfil</strong> no LinkedIn</li>
+                <li>Clique no botão <strong>"Mais"</strong> (fica abaixo da sua headline)</li>
+                <li>Escolha <strong>"Salvar como PDF"</strong></li>
+                <li>Envie o arquivo baixado na área abaixo ⤵</li>
+              </ol>
+            </div>
+
+            <div class="caminho-card">
+              <span class="caminho-tag">Caminho C · sem arquivos</span>
+              <h3>✍️ Copiar e colar</h3>
+              <p>Prefere não enviar arquivos? Sem problema: copie os textos do seu perfil e cole nos campos que abrem logo abaixo da área de envio.</p>
+            </div>
+          </div>
+
+          <!-- DROPZONE -->
+          <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Enviar arquivos do perfil">
+            <input type="file" id="file-input" accept=".png,.jpg,.jpeg,.webp,.pdf,image/png,image/jpeg,image/webp,application/pdf" multiple hidden />
+            <p class="dropzone-icon">⬆</p>
+            <p class="dropzone-title">Arraste seus prints ou o PDF aqui</p>
+            <p class="dropzone-sub">ou <span class="dropzone-link">toque para escolher os arquivos</span></p>
+            <p class="dropzone-formats">Aceita PNG, JPG e PDF · pode enviar vários de uma vez</p>
+          </div>
+          <ul id="file-list" class="file-list"></ul>
+
+          <details class="details-block">
+            <summary>✍️ Caminho C — abrir os campos para colar o texto</summary>
+            <div class="details-inner">
+              <label>Headline atual (o texto abaixo do seu nome)
+                <textarea name="headline" rows="2" placeholder="Cole sua headline atual"></textarea>
+              </label>
+              <label>Sobre atual (seção "Sobre" completa)
+                <textarea name="sobre" rows="6" placeholder="Cole o texto da sua seção Sobre. Se estiver vazia, deixe em branco."></textarea>
+              </label>
+              <label>Experiências (cargo, empresa e descrição — cole as 2 ou 3 mais relevantes)
+                <textarea name="experiencias" rows="8" placeholder="Ex.:&#10;Product Designer — Empresa X (2022–atual)&#10;Responsável por...&#10;&#10;UX Designer — Empresa Y (2019–2022)&#10;Atuei em..."></textarea>
+              </label>
+              <label>Competências listadas hoje no seu perfil
+                <textarea name="competencias" rows="2" placeholder="Ex.: Figma, Design Thinking, Pesquisa com usuários..."></textarea>
+              </label>
+              <p class="fieldset-help">Como você não enviou prints, marque o que já existe no seu perfil:</p>
+              <div class="checks">
+                <label class="check"><input type="checkbox" name="tem_foto" /> Tenho foto profissional</label>
+                <label class="check"><input type="checkbox" name="tem_banner" /> Tenho banner personalizado</label>
+                <label class="check"><input type="checkbox" name="tem_url" /> Minha URL é personalizada</label>
+                <label class="check"><input type="checkbox" name="tem_recomendacoes" /> Tenho recomendações recebidas</label>
+                <label class="check"><input type="checkbox" name="tem_destaques" /> Tenho itens em Destaques</label>
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- PASSO 2 — SSI -->
+      <section class="section section-dark">
+        <div class="container narrow">
+          <p class="eyebrow">passo 2 de 3</p>
+          <h2 class="light-title">Pegue seu SSI oficial</h2>
+          <p class="section-sub light">
+            O SSI (Social Selling Index) é a nota de 0 a 100 que o LinkedIn dá para o seu perfil.
+            A página é sua e só você consegue ver — por isso o passo é seu. Leva 1 minuto:
+          </p>
+
+          <div class="ssi-steps">
+            <div class="ssi-step">
+              <span class="ssi-step-num">1</span>
+              <p>Toque no botão abaixo. Ele abre a sua página oficial do SSI (você precisa estar logado no LinkedIn — se pedir login, entre normalmente).</p>
+            </div>
+            <div class="ssi-step">
+              <span class="ssi-step-num">2</span>
+              <p>Na página, você verá sua <strong>nota total</strong> e a nota dos <strong>4 pilares</strong>. Tire um <strong>print dessa tela</strong>.</p>
+            </div>
+            <div class="ssi-step">
+              <span class="ssi-step-num">3</span>
+              <p>Volte aqui e <strong>envie esse print junto com os outros, na área do Passo 1</strong>. A ferramenta lê os números sozinha.</p>
+            </div>
+          </div>
+
+          <p class="center">
+            <a href="https://www.linkedin.com/sales/ssi" target="_blank" rel="noopener" class="cta">Abrir minha página do SSI ↗</a>
+          </p>
+
+          <details class="details-block details-dark">
+            <summary>Prefere digitar os números em vez de mandar o print?</summary>
+            <div class="details-inner">
+              <div class="ssi-grid">
+                <label>SSI total (0–100)
+                  <input type="number" name="ssi_total" min="0" max="100" step="0.01" placeholder="Ex.: 42" />
+                </label>
+                <label>Estabelecer sua marca profissional (0–25)
+                  <input type="number" name="ssi_pilar_marca" min="0" max="25" step="0.01" placeholder="Ex.: 14,3" />
+                </label>
+                <label>Localizar as pessoas certas (0–25)
+                  <input type="number" name="ssi_pilar_pessoas" min="0" max="25" step="0.01" placeholder="Ex.: 8,1" />
+                </label>
+                <label>Interagir oferecendo insights (0–25)
+                  <input type="number" name="ssi_pilar_insights" min="0" max="25" step="0.01" placeholder="Ex.: 6,7" />
+                </label>
+                <label>Cultivar relacionamentos (0–25)
+                  <input type="number" name="ssi_pilar_relacionamentos" min="0" max="25" step="0.01" placeholder="Ex.: 12,9" />
+                </label>
+              </div>
+            </div>
+          </details>
+
+          <p class="hero-note center">Sem o SSI a análise também funciona — a ferramenta estima a nota. Mas com o número oficial o diagnóstico fica exato.</p>
+        </div>
+      </section>
+
+      <!-- PASSO 3 — OBJETIVO -->
+      <section class="section section-light">
+        <div class="container narrow">
+          <p class="eyebrow eyebrow-dark">passo 3 de 3</p>
+          <h2>Conte seu objetivo <span class="opcional">(opcional)</span></h2>
+          <p class="section-sub">Nada aqui é obrigatório — mas quanto mais contexto, mais certeira a configuração.</p>
+
+          <div class="grid-2">
+            <label>Seu nome
+              <input type="text" name="nome" placeholder="Como aparece no LinkedIn" />
+            </label>
+            <label>Área de atuação
+              <select name="area">
+                <option value="">Selecione</option>
+                <option>UX Design</option>
+                <option>Product Design</option>
+                <option>Service Design</option>
+                <option>CX / Customer Experience</option>
+                <option>UX Research</option>
+                <option>Outra área de design</option>
+              </select>
+            </label>
+            <label>Senioridade
+              <select name="senioridade">
+                <option value="">Selecione</option>
+                <option>Pleno</option>
+                <option>Sênior</option>
+                <option>Lead / Principal / Staff</option>
+                <option>Gestão (Coordenação, Head)</option>
+              </select>
+            </label>
+            <label>Momento de carreira
+              <select name="momento">
+                <option value="">Selecione</option>
+                <option>Em transição de empresa</option>
+                <option>Buscando promoção interna</option>
+                <option>Reposicionamento de área</option>
+                <option>Fortalecendo autoridade na área</option>
+              </select>
+            </label>
+            <label>Cargo ou posicionamento que você quer alcançar
+              <input type="text" name="objetivo" placeholder="Ex.: Service Designer Sênior em empresa de produto" />
+            </label>
+            <label>Mercado-alvo
+              <select name="mercado">
+                <option>Brasil</option>
+                <option>Internacional (inglês)</option>
+                <option>Brasil + Internacional</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="grid-2">
+            <label>Com que frequência você publica?
+              <select name="frequencia_publicacao">
+                <option value="">Selecione</option>
+                <option>Não publico</option>
+                <option>Raramente (menos de 1x/mês)</option>
+                <option>1 a 3x por mês</option>
+                <option>1x por semana</option>
+                <option>2x ou mais por semana</option>
+              </select>
+            </label>
+            <label>Tamanho da sua rede
+              <select name="tamanho_rede">
+                <option value="">Selecione</option>
+                <option>Menos de 500 conexões</option>
+                <option>500 a 1.000</option>
+                <option>1.000 a 3.000</option>
+                <option>Mais de 3.000</option>
+              </select>
+            </label>
+          </div>
+
+          <label>Algo mais que a análise precisa saber?
+            <textarea name="contexto" rows="3" placeholder="Ex.: empresas onde já trabalhou, resultados que tem para provar, empresas-alvo..."></textarea>
+          </label>
+
+          <button type="submit" class="cta cta-full" id="submit-btn">Gerar minha configuração</button>
+          <p id="form-error" class="form-error" hidden></p>
+        </div>
+      </section>
+    </form>
+
+    <!-- LOADING -->
+    <section id="loading" class="section section-dark" hidden>
+      <div class="container narrow center">
+        <div class="spinner" aria-hidden="true"></div>
+        <h2 class="loading-title">Lendo seu perfil…</h2>
+        <p id="loading-msg" class="section-sub light">Analisando os 4 pilares do SSI.</p>
+        <p class="hero-note">A análise completa leva de 1 a 3 minutos. Não feche esta página.</p>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="resultado" class="section section-light" hidden>
+      <div class="container">
+        <p class="eyebrow eyebrow-dark">seu diagnóstico</p>
+        <h2>Configuração completa do seu perfil</h2>
+        <div id="resultado-conteudo"></div>
+        <div class="result-actions">
+          <button class="cta secondary" id="nova-analise">Fazer nova análise</button>
+          <button class="cta" id="baixar-md">Baixar diagnóstico (.md)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MÉTODO -->
+    <section class="section section-dark">
+      <div class="container narrow center">
+        <p class="eyebrow">método maestria</p>
+        <h2 class="light-title">A vitrine precisa sustentar<br />o nível que você já atingiu.</h2>
+        <p class="section-sub light">
+          Esta ferramenta configura seu LinkedIn. A Aceleração Maestria constrói a vitrine completa:
+          currículo ATS, LinkedIn, portfólio e apresentação de case — em ~6 meses de construção guiada.
+        </p>
+        <a href="https://aureaeducacao.com.br" class="cta" target="_blank" rel="noopener">Conhecer a Aceleração Maestria</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p><strong>áurea educação</strong> · Clareza antes de velocidade. Método sempre vence sorte.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
